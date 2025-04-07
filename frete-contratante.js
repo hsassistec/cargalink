@@ -1,5 +1,5 @@
 import { db, auth } from './firebase-init.js';
-import { collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { collection, addDoc, getDocs, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 document.getElementById("freteForm").addEventListener("submit", async (e) => {
@@ -43,17 +43,31 @@ function carregarHistorico(uid) {
       return;
     }
 
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      lista.innerHTML += `
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      let html = `
         <p><strong>${data.tipo}</strong> - ${data.origem} até ${data.destino} - R$${data.valor}</p>
         <p>Status: ${data.status}</p>
         ${data.motorista ? `<p>Motorista ID: ${data.motorista}</p>` : ""}
-        <hr/>
       `;
+
+      if (data.status === "disponível") {
+        html += `<button onclick="cancelarFrete('${docSnap.id}')">Cancelar Frete</button>`;
+      }
+
+      html += "<hr/>";
+      lista.innerHTML += html;
     });
   });
 }
+
+window.cancelarFrete = async function(freteId) {
+  if (confirm("Tem certeza que deseja cancelar este frete?")) {
+    await deleteDoc(doc(db, "fretes", freteId));
+    alert("Frete cancelado com sucesso!");
+    carregarHistorico(auth.currentUser.uid);
+  }
+};
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
