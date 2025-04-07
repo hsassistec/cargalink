@@ -27,10 +27,11 @@ async function carregarFretes() {
         <button onclick="aceitarFrete('${id}')">Aceitar Frete</button>
         <hr/>
       `;
-    } else if (data.status === "em andamento" && data.motorista === user.uid) {
+    } else if (data.motorista === user.uid) {
       htmlAceitos += `
         <p><strong>${data.tipo}</strong> - ${data.origem} até ${data.destino} - R$${data.valor}</p>
         <p>Status: ${data.status}</p>
+        ${data.status === "em andamento" ? `<button onclick="finalizarFrete('${id}')">Finalizar Frete</button>` : ""}
         <hr/>
       `;
     }
@@ -53,6 +54,15 @@ window.aceitarFrete = async function(freteId) {
   });
 
   alert("Frete aceito com sucesso!");
+  carregarFretes();
+};
+
+window.finalizarFrete = async function(freteId) {
+  const freteRef = doc(db, "fretes", freteId);
+  await updateDoc(freteRef, {
+    status: "concluído"
+  });
+  alert("Frete finalizado!");
   carregarFretes();
 };
 
