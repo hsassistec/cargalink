@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cadastro</title>
+  <script type="module" src="cadastro.js"></script>
+</head>
+<body>
+  <h2>Cadastro</h2>
+  <input id="email" type="email" placeholder="Email"><br/>
+  <input id="senha" type="password" placeholder="Senha"><br/>
+  <select id="tipo">
+    <option value="contratante">Contratante</option>
+    <option value="motorista">Motorista</option>
+    <option value="admin">Administrador</option>
+  </select><br/>
+  <button onclick="cadastrar()">Cadastrar</button>
+  <p id="msg"></p>
+</body>
+</html>

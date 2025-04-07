@@ -2,15 +2,17 @@
 <html>
 <head>
   <title>Contratante - Criar Frete</title>
+  <script type="module" src="frete-contratante.js"></script>
 </head>
 <body>
   <h2>Criar Novo Frete</h2>
-  <form>
-    <input type="text" placeholder="Origem" /><br/>
-    <input type="text" placeholder="Destino" /><br/>
-    <input type="text" placeholder="Tipo de Carga" /><br/>
-    <input type="number" placeholder="Valor (R$)" /><br/>
+  <form id="freteForm">
+    <input type="text" id="origem" placeholder="Origem" /><br/>
+    <input type="text" id="destino" placeholder="Destino" /><br/>
+    <input type="text" id="tipo" placeholder="Tipo de Carga" /><br/>
+    <input type="number" id="valor" placeholder="Valor (R$)" /><br/>
     <button type="submit">Cadastrar Frete</button>
   </form>
+  <p id="msg"></p>
 </body>
 </html>
