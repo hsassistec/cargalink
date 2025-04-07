@@ -1,1 +1,22 @@
-body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
+body {
+  background: #f4f4f4;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  margin-top: 100px;
+}
+.buttons a {
+  display: inline-block;
+  margin: 10px;
+  padding: 15px 30px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+}
+.buttons a:hover {
+  background-color: #0056b3;
+}
