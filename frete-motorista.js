@@ -6,26 +6,43 @@ const fretesDiv = document.getElementById("fretes");
 const auth = getAuth();
 
 async function carregarFretes() {
+  const user = auth.currentUser;
+  if (!user) {
+    fretesDiv.innerHTML = "<p>Você precisa estar logado.</p>";
+    return;
+  }
+
   const querySnapshot = await getDocs(collection(db, "fretes"));
-  fretesDiv.innerHTML = ""; // Limpar antes
+
+  let htmlDisponiveis = "<h3>Fretes Disponíveis</h3>";
+  let htmlAceitos = "<h3>Meus Fretes</h3>";
+
   querySnapshot.forEach((docSnap) => {
     const data = docSnap.data();
+    const id = docSnap.id;
+
     if (data.status === "disponível") {
-      const div = document.createElement("div");
-      div.innerHTML = `
+      htmlDisponiveis += `
         <p><strong>${data.tipo}</strong> - ${data.origem} até ${data.destino} - R$${data.valor}</p>
-        <button onclick="aceitarFrete('${docSnap.id}')">Aceitar Frete</button>
+        <button onclick="aceitarFrete('${id}')">Aceitar Frete</button>
         <hr/>
       `;
-      fretesDiv.appendChild(div);
+    } else if (data.status === "em andamento" && data.motorista === user.uid) {
+      htmlAceitos += `
+        <p><strong>${data.tipo}</strong> - ${data.origem} até ${data.destino} - R$${data.valor}</p>
+        <p>Status: ${data.status}</p>
+        <hr/>
+      `;
     }
   });
+
+  fretesDiv.innerHTML = htmlAceitos + "<br/>" + htmlDisponiveis;
 }
 
 window.aceitarFrete = async function(freteId) {
   const user = auth.currentUser;
   if (!user) {
-    alert("Você precisa estar logado para aceitar fretes.");
+    alert("Você precisa estar logado.");
     return;
   }
 
@@ -34,6 +51,7 @@ window.aceitarFrete = async function(freteId) {
     status: "em andamento",
     motorista: user.uid
   });
+
   alert("Frete aceito com sucesso!");
   carregarFretes();
 };
