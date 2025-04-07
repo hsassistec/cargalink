@@ -15,7 +15,7 @@ async function carregarFretes() {
   const querySnapshot = await getDocs(collection(db, "fretes"));
 
   let htmlDisponiveis = "<h3>Fretes Disponíveis</h3>";
-  let htmlAceitos = "<h3>Meus Fretes</h3>";
+  let htmlMeusFretes = "<h3>Meu Histórico</h3>";
 
   querySnapshot.forEach((docSnap) => {
     const data = docSnap.data();
@@ -28,7 +28,7 @@ async function carregarFretes() {
         <hr/>
       `;
     } else if (data.motorista === user.uid) {
-      htmlAceitos += `
+      htmlMeusFretes += `
         <p><strong>${data.tipo}</strong> - ${data.origem} até ${data.destino} - R$${data.valor}</p>
         <p>Status: ${data.status}</p>
         ${data.status === "em andamento" ? `<button onclick="finalizarFrete('${id}')">Finalizar Frete</button>` : ""}
@@ -37,7 +37,7 @@ async function carregarFretes() {
     }
   });
 
-  fretesDiv.innerHTML = htmlAceitos + "<br/>" + htmlDisponiveis;
+  fretesDiv.innerHTML = htmlMeusFretes + "<br/>" + htmlDisponiveis;
 }
 
 window.aceitarFrete = async function(freteId) {
